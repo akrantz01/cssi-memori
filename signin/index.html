@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Memori | Sign-in</title>
+
+        <!-- Load Roboto font to comply w/ Google style guidelines -->
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+
+        <!-- CSS from project and Bootstrap -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="signin.css"/>
+
+        <!-- Load JQuery -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+        <!-- Load Toastr -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" integrity="sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ==" crossorigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
+
+        <!-- Firebase configuration -->
+        <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
+        <script>
+            firebase.initializeApp({
+                apiKey: "AIzaSyB2xKSYGzcG1X1DNTcqTv6QW-98qp3cPwI",
+                authDomain: "memori-3b9ff.firebaseapp.com",
+                databaseURL: "https://memori-3b9ff.firebaseio.com",
+                projectId: "memori-3b9ff",
+                storageBucket: "memori-3b9ff.appspot.com",
+                messagingSenderId: "823866469532",
+                appId: "1:823866469532:web:ce55df7d0acc899c8b5159",
+                measurementId: "G-KT4EGF9CW4"
+            });
+            firebase.analytics();
+        </script>
+    </head>
+    <body class="text-center">
+        <div class="form-signin">
+            <!-- Header -->
+            <img class="mb-4" src="https://getbootstrap.com/docs/4.5/assets/brand/bootstrap-solid.svg" alt="Memori logo" width="72" height="72"/>
+            <h1 class="h3 mb-3 font-weight-normal">Please sign in to Memori</h1>
+
+            <br/>
+            <br/>
+
+            <!-- Sign-in with Google button -->
+            <div id="googleBtn" style="display: none">
+                <span class="icon"></span>
+                <span class="buttonText">Sign in with Google</span>
+            </div>
+            <div class="spinner-border text-primary" id="loading-spinner" role="status">
+                <div class="sr-only">Loading...</div>
+            </div>
+
+            <br/>
+
+            <p class="mt-5 mb-3 text-muted">Made by CSSI Cohort 8 - Group 8</p>
+        </div>
+
+        <script src="signin.js"></script>
+    </body>
+</html>
