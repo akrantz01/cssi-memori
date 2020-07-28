@@ -6,7 +6,7 @@
 function signOutCallback() {
     console.log("Signing out");
     firebase.auth().signOut()
-        .then(() => window.location.href = "/signin/")
+        .then(() => window.location.href = "../signin/")
         .catch(() => toastr.error("Failed to sign out"));
 }
 
@@ -16,6 +16,6 @@ function signOutCallback() {
 function checkUserLoggedIn() {
     // Send the user back to sign in if not logged in
     firebase.auth().onAuthStateChanged(user => {
-        if (!user) window.location.href = "/signin/";
+        if (!user) window.location.href = "../signin/";
     });
 }
