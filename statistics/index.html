@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Memori | Statistics</title>
+
+        <!-- Load Roboto font to comply w/ Google style guidelines -->
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+
+        <!-- CSS from project and Bootstrap -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/framework.css"/>
+        <link rel="stylesheet" href="statistics.css"/>
+
+        <!-- Load Toastr -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" integrity="sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ==" crossorigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous"></script>
+
+        <!-- Chart.js for graphs -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js" integrity="sha512-vBmx0N/uQOXznm/Nbkp7h0P1RfLSj0HQrFSzV8m7rOGyj30fYAOKHYvCNez+yM8IrfnW0TCodDEjRqf6fodf/Q==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js" integrity="sha512-UXumZrZNiOwnTcZSHLOfcTs0aos2MzBWHXOHOuB0J/R44QB0dwY5JgfbvljXcklVf65Gc4El6RjZ+lnwd2az2g==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/0.7.7/chartjs-plugin-zoom.min.js" integrity="sha512-8E9fPF4pjWxI0dpprpn4WYeciAMo2kh6xN0COFxvTfurMttjZzih/sBp+Fxu49Zr6IUSp4sqWY6KLecnqOCwxA==" crossorigin="anonymous"></script>
+
+        <!-- Icons -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js" integrity="sha512-7x3zila4t2qNycrtZ31HO0NnJr8kg2VI67YLoRSyi9hGhRN66FHYWr7Axa9Y1J9tGYHVBPqIjSE1ogHrJTz51g==" crossorigin="anonymous"></script>
+
+        <!-- Firebase configuration -->
+        <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
+        <script>
+            firebase.initializeApp({
+                apiKey: "AIzaSyB2xKSYGzcG1X1DNTcqTv6QW-98qp3cPwI",
+                authDomain: "memori-3b9ff.firebaseapp.com",
+                databaseURL: "https://memori-3b9ff.firebaseio.com",
+                projectId: "memori-3b9ff",
+                storageBucket: "memori-3b9ff.appspot.com",
+                messagingSenderId: "823866469532",
+                appId: "1:823866469532:web:ce55df7d0acc899c8b5159",
+                measurementId: "G-KT4EGF9CW4"
+            });
+            firebase.analytics();
+        </script>
+    </head>
+    <body>
+        <!-- Header -->
+        <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+            <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" style="font-size: 1.25rem" href="#">Memori</a>
+            <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <ul class="navbar-nav px-3">
+                <li class="nav-item text-nowrap">
+                    <a class="nav-link" onclick="signOutCallback()">Sign out</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Nav sidebar -->
+        <div class="container-fluid">
+            <div class="row">
+                <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                    <div class="sidebar-sticky pt-3">
+                        <!-- Primary sidebar links -->
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <span data-feather="home"></span>
+                                    Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">
+                                    <span data-feather="activity"></span>
+                                    Activity <span class="sr-only">(current)</span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- Games sidebar subheader -->
+                        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                            <span>Games</span>
+                        </h6>
+                        <ul class="nav flex-column mb-2">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <span data-feather="hash"></span>
+                                    Numbers
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <span data-feather="droplet"></span>
+                                    Elements
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+                    <!-- Header for the page -->
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1>Today's Activity</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button type="button" class="btn btn-sm btn-outline-primary">Share</button>
+                        </div>
+                    </div>
+
+                    <!-- Display numbers data -->
+                    <h3 style="margin-bottom: -1.5rem;">Elements</h3>
+                    <div class="container">
+                        <div class="row justify-content-around">
+                            <div class="col-sm">
+                                <span class="big-text" id="elementsGamesPlayed">10</span>
+                                <span class="text-wrap stacked-text" style="margin-left: 0.5em">Games Played</span>
+                            </div>
+                            <div class="col-sm text-right">
+                                <span class="text-wrap stacked-text" style="margin-right: 3.5em">Average Score</span>
+                                <span class="big-text" id="elementsAverageScore">10</span>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <!-- Display elements data -->
+                    <h3 style="margin-bottom: -1.5rem;">Numbers</h3>
+                    <div class="container">
+                        <div class="row justify-content-around">
+                            <div class="col-sm">
+                                <span class="big-text" id="numbersGamesPlayed">10</span>
+                                <span class="text-wrap stacked-text" style="margin-left: 0.5em">Games Played</span>
+                            </div>
+                            <div class="col-sm text-right">
+                                <span class="text-wrap stacked-text" style="margin-right: 3.5em">Average Score</span>
+                                <span class="big-text" id="numbersAverageScore">10</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Line break between sections -->
+                    <br/>
+                    <hr/>
+                    <br/>
+
+                    <!-- Display different graphs -->
+                    <div class="row">
+                        <div class="col">
+                            <h2 style="font-size: 2.25rem">Your Performance over Time</h2>
+                        </div>
+                        <div class="col text-right">
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle mr-2" id="dateRangeSelect" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span data-feather="calendar"></span>
+                                    <span id="dateRangeText">This week</span>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dateRangeSelect">
+                                    <a class="dropdown-item" onclick="selectDateRangeCallback(7)">This week</a>
+                                    <a class="dropdown-item" onclick="selectDateRangeCallback(14, 7)">Last week</a>
+                                    <a class="dropdown-item" onclick="selectDateRangeCallback(30)">This month</a>
+                                    <a class="dropdown-item" onclick="selectDateRangeCallback(90)">Last 3 months</a>
+                                    <a class="dropdown-item" onclick="selectDateRangeCallback(180)">Last 6 months</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas class="my-4 w-100" id="gamesPerDayChart"></canvas>
+                    <br/>
+                    <canvas class="my-4 w-100" id="averageScorePerGameChart"></canvas>
+                    <br/>
+                    <canvas class="my-4 w-100" id="accuracyPerGameChart"></canvas>
+                    <br/>
+                    <div class="row">
+                        <div class="col">
+                            <canvas class="my-4 w-50" id="gamesDistributionChart"></canvas>
+                        </div>
+                        <div class="col">
+                            <canvas class="my-4 w-50" id="otherChart"></canvas>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- Scripts for Bootstrap -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+        <!-- Application scripts -->
+        <script src="/js/framework.js"></script>
+        <script src="/js/auth.js"></script>
+        <script src="charts.js"></script>
+        <script src="statistics.js"></script>
+    </body>
+</html>

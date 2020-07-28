@@ -1,0 +1,14 @@
+/*
+ * Text utilities
+ */
+.big-text {
+    font-size: 7.5rem;
+    font-weight: bold;
+}
+
+.stacked-text {
+    font-size: 2.5rem;
+    width: 1rem;
+    display: inline-block;
+    line-height: 1.25em;
+}
