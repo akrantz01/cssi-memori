@@ -1,22 +1,18 @@
-// periodic table json src: https://github.com/Bowserinator/Periodic-Table-JSON
-
-// icons Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a>
-// from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+// Periodic Table JSON source: https://github.com/Bowserinator/Periodic-Table-JSON
+// Icons made by Freepik, Pixel perfect, and Vitaly Gorbachev from www.flaticon.com
 
 /* global createCanvas, colorMode, HSB, width, height, random, background, fill, noFill, color, random,
           rect, ellipse, stroke, image, loadImage, frameRate, collideCircleCircle, collideRectCircle, text, 
           mouseX, mouseY, strokeWeight, line, mouseIsPressed, windowWidth, windowHeight, noStroke, 
           keyCode, UP_ARROW, LEFT_ARROW, RIGHT_ARROW, DOWN_ARROW, textSize, noLoop, loop, textFont,
           collideRectRect, round, createButton, createInput, floor, createSelect, loadFont, textAlign,
-          CENTER, LEFT, tint, RGB, AUTO, PI, rotate, translate */
+          CENTER, LEFT, tint, RGB, AUTO, PI, rotate, translate, textStyle, BOLD */
 
 let elementList, score, tries, currentPage;
 let correctImg, incorrectImg, periodicTableImg, elementGroupImg;
 let startButton, nextButton, homeButton, inputButton, gameInput, correctList;
 let randIndex, correctAns, userAns;
-let titleFont, bodyFont;
-
-// bool currentPage: 0 = home, 1 = game, 2 = end
+let titleFont, bodyFont, memoriFont;
 
 function setup() {
   // Canvas & color settings
@@ -29,6 +25,9 @@ function setup() {
   );
   bodyFont = loadFont(
     "https://cdn.glitch.com/c5f5b5e1-9d90-4c59-a260-e2495c66c02c%2FRoboto-Regular.ttf?v=1596001816087"
+  );
+  memoriFont = loadFont(
+    "https://cdn.glitch.com/c5f5b5e1-9d90-4c59-a260-e2495c66c02c%2FOpenSans-SemiBold.ttf?v=1596063681833"
   );
 
   // json setup
@@ -84,6 +83,7 @@ function draw() {
   }
 
   // button display
+  // bool currentPage: 0 = home, 1 = game, 2 = end
   if (currentPage == 0) {
     nextButton.position(-width, -height);
     homeButton.position(-width, -height);
@@ -105,7 +105,7 @@ function parseJSON(ptData) {
   let ptJSON = JSON.parse(ptData);
   // console.log(ptJSON["elements"]);
   for (const element of ptJSON["elements"]) {
-    console.log(element);
+    // console.log(element);
     // to retrieve element name, for example, just do element.name
     elementList.push(element);
   }
@@ -122,13 +122,18 @@ function titleScreen() {
 
   colorMode(RGB, 100);
   tint(255, 20);
-  image(periodicTableImg, width * 0.4, 0, 700, 700);
+  image(periodicTableImg, width * 0.4, height * 0.1, 700, 700);
 
   // reset color scheme
   tint(255, 100);
   colorMode(HSB, 360, 100, 100);
 
+  // memori logo
   fill("white");
+  textSize(30);
+  textFont(memoriFont);
+  text("Memori", width * 0.05, width * 0.05);
+
   textSize(110);
   textFont(titleFont);
   textAlign(LEFT, CENTER);
@@ -181,6 +186,7 @@ function startGame() {
   fill("black");
   textSize(35);
 
+  textFont(titleFont);
   textAlign(CENTER);
   text(
     `${elementList[randIndex].number}`,
@@ -198,6 +204,7 @@ function startGame() {
 
   tries--;
 
+  textFont(bodyFont);
   textSize(30);
   gameInput.size(width * 0.15, height * 0.05);
   gameInput.position(width * 0.6, height * 0.45);
@@ -215,7 +222,7 @@ function userGuess() {
 function checkAnswer() {
   // console.log('check ans');
   if (userAns.toLowerCase() == elementList[randIndex].name.toLowerCase()) {
-    console.log("TRUE");
+    // console.log("TRUE");
     image(
       correctImg,
       (2 * gameInput.x + gameInput.width) / 2 - 25,
@@ -227,7 +234,7 @@ function checkAnswer() {
     correctList.push(true);
     score += 1;
   } else {
-    console.log("FALSE");
+    // console.log("FALSE");
     image(
       incorrectImg,
       (2 * gameInput.x + gameInput.width) / 2 - 25,
@@ -239,7 +246,7 @@ function checkAnswer() {
     fill("#F44236");
   }
 
-  console.log(`score: ${score}`);
+  // console.log(`score: ${score}`);
   textSize(40);
   text(
     `${elementList[randIndex].name}`,
@@ -258,7 +265,7 @@ function checkAnswer() {
   nextButton.style("border-radius", "5px");
   nextButton.style("font-size", "18px");
   nextButton.style("padding", "10px");
-  
+
   if (tries > 0) {
     nextButton.mousePressed(startGame);
   } else {
@@ -274,8 +281,10 @@ function endScreen() {
 
   fill("white");
   textSize(55);
+  textFont(titleFont);
   text(`Final Score: ${score}`, width / 2, height * 0.4);
 
+  textFont(bodyFont);
   homeButton.style("background-color", `${inputButton.color}`);
   homeButton.style("border", "none");
   homeButton.style("border-radius", "5px");
