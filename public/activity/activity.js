@@ -49,7 +49,7 @@ function displayRange(to, from=0) {
     renderAccuracyPerGameChart({ numbers: Numbers.accuracyPerDay.slice(startIdx, endIdx), elements: Elements.accuracyPerDay.slice(startIdx, endIdx) }, labels);
 
     // Render smaller charts
-    renderGamesDistributionChart(50, 50);
+    renderGamesDistributionChart(Numbers.totalGames, Elements.totalGames);
 }
 
 /**
