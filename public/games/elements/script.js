@@ -16,15 +16,15 @@ let titleFont, bodyFont, memoriFont;
 
 function preload() {
   // Load fonts
-  titleFont = loadFont("assets/fonts/OpenSans-Regular.ttf");
-  bodyFont = loadFont("assets/fonts/Roboto-Regular.ttf");
-  memoriFont = loadFont("assets/fonts/OpenSans-SemiBold.ttf");
+  titleFont = loadFont("/assets/fonts/OpenSans-Regular.ttf");
+  bodyFont = loadFont("/assets/fonts/Roboto-Regular.ttf");
+  memoriFont = loadFont("/assets/fonts/OpenSans-SemiBold.ttf");
 
   // Load images
-  correctImg = loadImage("assets/img/correct.png");
-  incorrectImg = loadImage("assets/img/criss-cross.png");
-  periodicTableImg = loadImage("assets/img/periodic-table.png");
-  elementGroupImg = loadImage("assets/img/element.png");
+  correctImg = loadImage("/assets/img/correct.png");
+  incorrectImg = loadImage("/assets/img/criss-cross.png");
+  periodicTableImg = loadImage("/assets/img/periodic-table.png");
+  elementGroupImg = loadImage("/assets/img/element.png");
 }
 
 function setup() {
@@ -34,7 +34,7 @@ function setup() {
   colorMode(HSB, 360, 100, 100);
 
   // json setup
-  fetch("assets/periodic-table.json")
+  fetch("periodic-table.json")
     .then(response => response.text())
     .then(text => parseJSON(text));
 
