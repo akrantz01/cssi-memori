@@ -1,6 +1,8 @@
 // Register event listeners on document load
 $(document).ready(() => firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
     .then(function () {
+        const url = new URL(window.location);
+
         // Redirect if already logged in
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
@@ -8,7 +10,7 @@ $(document).ready(() => firebase.auth().setPersistence(firebase.auth.Auth.Persis
                 toastr.success(user.email, "Successfully signed in");
 
                 // Redirect after 2.5 seconds so they can see it
-                setTimeout(() => window.location.href = "/", 2500);
+                setTimeout(() => window.location.href = (url.searchParams.get("next") !== null) ? url.searchParams.get("next") : "/", 2500);
 
             // Display sign in button if not logged in
             } else toggleLoading(false);
