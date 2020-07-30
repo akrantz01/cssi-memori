@@ -16,6 +16,9 @@ let openSans, roboto, buttonColor;
 // Remove console.logs
 console.log = () => {};
 
+// Ensure the user is logged in before continuing
+checkUserLoggedIn();
+
 function preload() {
     //soundFormats('mp3', 'ogg');
     openSans = loadFont("/assets/fonts/OpenSans-SemiBold.ttf");

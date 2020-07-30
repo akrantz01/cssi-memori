@@ -14,6 +14,9 @@ let startButton, nextButton, homeButton, toStartButton, inputButton, gameInput, 
 let randIndex, correctAns, userAns;
 let titleFont, bodyFont, memoriFont;
 
+// Ensure the user is logged in before continuing
+checkUserLoggedIn();
+
 function preload() {
   // Load fonts
   titleFont = loadFont("/assets/fonts/OpenSans-Regular.ttf");
