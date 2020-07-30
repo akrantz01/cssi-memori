@@ -157,10 +157,7 @@ function renderAverageScorePerGameChart({ numbers, elements }, labels) {
 
     // Add additional style to the datasets
     let datasets = styleDatasets(numbers, elements);
-    for (const dataset of datasets) {
-        dataset.fill = false;
-        dataset.lineTension = 0.25;
-    }
+    for (const dataset of datasets) dataset.fill = false;
 
     // Render the chart
     new Chart(ctx, {
@@ -191,12 +188,19 @@ function renderAccuracyPerGameChart({ numbers, elements }, labels) {
         suggestedMin: 0
     };
 
+    // Style the data
+    let datasets = styleDatasets(numbers, elements)
+    for (const dataset of datasets) {
+        dataset.fill = false;
+        dataset.lineTension = 0;
+    }
+
     // Render the chart
     new Chart(ctx, {
-        type: "bar",
+        type: "line",
         data: {
             labels: labels,
-            datasets: styleDatasets(numbers, elements),
+            datasets: datasets,
         },
         options: options
     });
@@ -244,7 +248,7 @@ function renderGamesDistributionChart(numbers, elements) {
             },
             title: {
                 display: true,
-                text: "Percent of each Game Played"
+                text: "Number of each Game Played"
             },
             responsive: true
         }
