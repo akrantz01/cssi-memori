@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Memori | Flash Numbers</title>
+        <meta charset="utf-8">
+        <style>
+            body {
+                overflow: hidden;
+                margin: 0;
+            }
+        </style>
+
+        <!-- Import p5 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js" integrity="sha512-WIklPM6qPCIp6d3fSSr90j+1unQHUOoWDS4sdTiR8gxUTnyZ8S2Mr8e10sKKJ/bhJgpAa/qG068RDkg6fIlNFA==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/addons/p5.sound.min.js" integrity="sha512-wM+t5MzLiNHl2fwT5rWSXr2JMeymTtixiw2lWyVk1JK/jDM4RBSFoH4J8LjucwlDdY6Mu84Kj0gPXp7rLGaDyA==" crossorigin="anonymous"></script>
+
+        <!-- Firebase configuration -->
+        <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
+        <script>
+            firebase.initializeApp({
+                apiKey: "AIzaSyB2xKSYGzcG1X1DNTcqTv6QW-98qp3cPwI",
+                authDomain: "memori-3b9ff.firebaseapp.com",
+                databaseURL: "https://memori-3b9ff.firebaseio.com",
+                projectId: "memori-3b9ff",
+                storageBucket: "memori-3b9ff.appspot.com",
+                messagingSenderId: "823866469532",
+                appId: "1:823866469532:web:ce55df7d0acc899c8b5159",
+                measurementId: "G-KT4EGF9CW4"
+            });
+            firebase.analytics();
+        </script>
+
+        <!-- Firebase data layer -->
+        <script src="../../js/data.js"></script>
+    </head>
+    <body>
+        <!-- Run the script -->
+        <script src="script.js"></script>
+    </body>
+</html>
