@@ -2,17 +2,30 @@
 // Icons made by Freepik, Pixel perfect, and Vitaly Gorbachev from www.flaticon.com
 
 /* global createCanvas, colorMode, HSB, width, height, random, background, fill, noFill, color, random,
-          rect, ellipse, stroke, image, loadImage, frameRate, collideCircleCircle, collideRectCircle, text, 
-          mouseX, mouseY, strokeWeight, line, mouseIsPressed, windowWidth, windowHeight, noStroke, 
+          rect, ellipse, stroke, image, loadImage, frameRate, collideCircleCircle, collideRectCircle, text,
+          mouseX, mouseY, strokeWeight, line, mouseIsPressed, windowWidth, windowHeight, noStroke,
           keyCode, UP_ARROW, LEFT_ARROW, RIGHT_ARROW, DOWN_ARROW, textSize, noLoop, loop, textFont,
           collideRectRect, round, createButton, createInput, floor, createSelect, loadFont, textAlign,
           CENTER, LEFT, tint, RGB, AUTO, PI, rotate, translate, textStyle, BOLD */
 
 let elementList, score, tries, currentPage;
 let correctImg, incorrectImg, periodicTableImg, elementGroupImg;
-let startButton, nextButton, homeButton, inputButton, gameInput, correctList;
+let startButton, nextButton, homeButton, toStartButton, inputButton, gameInput, correctList;
 let randIndex, correctAns, userAns;
 let titleFont, bodyFont, memoriFont;
+
+function preload() {
+  // Load fonts
+  titleFont = loadFont("assets/fonts/OpenSans-Regular.ttf");
+  bodyFont = loadFont("assets/fonts/Roboto-Regular.ttf");
+  memoriFont = loadFont("assets/fonts/OpenSans-SemiBold.ttf");
+
+  // Load images
+  correctImg = loadImage("assets/img/correct.png");
+  incorrectImg = loadImage("assets/img/criss-cross.png");
+  periodicTableImg = loadImage("assets/img/periodic-table.png");
+  elementGroupImg = loadImage("assets/img/element.png");
+}
 
 function setup() {
   // Canvas & color settings
@@ -20,24 +33,15 @@ function setup() {
   c.position(0, 0);
   colorMode(HSB, 360, 100, 100);
 
-  titleFont = loadFont(
-    "https://cdn.glitch.com/c5f5b5e1-9d90-4c59-a260-e2495c66c02c%2FOpenSans-Regular.ttf?v=1596003672608"
-  );
-  bodyFont = loadFont(
-    "https://cdn.glitch.com/c5f5b5e1-9d90-4c59-a260-e2495c66c02c%2FRoboto-Regular.ttf?v=1596001816087"
-  );
-  memoriFont = loadFont(
-    "https://cdn.glitch.com/c5f5b5e1-9d90-4c59-a260-e2495c66c02c%2FOpenSans-SemiBold.ttf?v=1596063681833"
-  );
-
   // json setup
-  fetch("PeriodicTableJSON.json")
+  fetch("assets/periodic-table.json")
     .then(response => response.text())
     .then(text => parseJSON(text));
 
   // draw setup
   startButton = createButton("Start");
   nextButton = createButton("Next");
+  toStartButton = createButton("Back to Start");
   homeButton = createButton("Home");
 
   elementList = [];
@@ -46,22 +50,10 @@ function setup() {
 
   startButton.position(-width, -height);
   nextButton.position(-width, -height);
-  homeButton.position(-width, -height);
+  toStartButton.position(-width, -height);
   gameInput.position(-width, -height);
   inputButton.position(-width, -height);
-
-  correctImg = loadImage(
-    "https://cdn.glitch.com/c5f5b5e1-9d90-4c59-a260-e2495c66c02c%2Fcorrect.png?v=1595961729752"
-  );
-  incorrectImg = loadImage(
-    "https://cdn.glitch.com/c5f5b5e1-9d90-4c59-a260-e2495c66c02c%2Fcriss-cross.png?v=1595961729872"
-  );
-  periodicTableImg = loadImage(
-    "https://cdn.glitch.com/c5f5b5e1-9d90-4c59-a260-e2495c66c02c%2Fperiodic-table%20(1).png?v=1596006584045"
-  );
-  elementGroupImg = loadImage(
-    "https://cdn.glitch.com/c5f5b5e1-9d90-4c59-a260-e2495c66c02c%2Felement.png?v=1596044591117"
-  );
+  homeButton.position(-width, -height);
 
   correctList = [];
   currentPage = 0;
@@ -86,17 +78,19 @@ function draw() {
   // bool currentPage: 0 = home, 1 = game, 2 = end
   if (currentPage == 0) {
     nextButton.position(-width, -height);
-    homeButton.position(-width, -height);
+    toStartButton.position(-width, -height);
     gameInput.position(-width, -height);
     inputButton.position(-width, -height);
   } else if (currentPage == 1) {
     startButton.position(-width, -height);
+    toStartButton.position(-width, -height);
     homeButton.position(-width, -height);
   } else if (currentPage == 2) {
     startButton.position(-width, -height);
     nextButton.position(-width, -height);
     gameInput.position(-width, -height);
     inputButton.position(-width, -height);
+    homeButton.position(-width, -height);
   }
 }
 
@@ -155,6 +149,13 @@ function titleScreen() {
   startButton.style("font-size", "20px");
   startButton.style("padding", "10px");
   startButton.mousePressed(startGame);
+  homeButton.position(width * 0.205, height * 0.75, width);
+  homeButton.style("background-color", "white");
+  homeButton.style("border", "none");
+  homeButton.style("border-radius", "5px");
+  homeButton.style("font-size", "20px");
+  homeButton.style("padding", "10px");
+  homeButton.mousePressed(() => window.location.href = "/");
 }
 
 function startGame() {
@@ -270,7 +271,7 @@ function checkAnswer() {
   if (tries > 0) {
     nextButton.mousePressed(startGame);
   } else {
-    nextButton.mousePressed(endScreen);
+    nextButton.mousePressed(() => Elements.playedGame((score / 10) * 100, score).then(endScreen));
   }
   // console.log(tries);
 }
@@ -286,13 +287,13 @@ function endScreen() {
   text(`Final Score: ${score}`, width / 2, height * 0.4);
 
   textFont(bodyFont);
-  homeButton.style("background-color", `${inputButton.color}`);
-  homeButton.style("border", "none");
-  homeButton.style("border-radius", "5px");
-  homeButton.style("font-size", "18px");
-  homeButton.style("padding", "10px");
-  homeButton.position((width - homeButton.width) / 2, height * 0.5);
-  homeButton.mousePressed(titleScreen);
+  toStartButton.style("background-color", `${inputButton.color}`);
+  toStartButton.style("border", "none");
+  toStartButton.style("border-radius", "5px");
+  toStartButton.style("font-size", "18px");
+  toStartButton.style("padding", "10px");
+  toStartButton.position((width - toStartButton.width) / 2, height * 0.5);
+  toStartButton.mousePressed(titleScreen);
 
   // element group images
   colorMode(RGB, 100);
