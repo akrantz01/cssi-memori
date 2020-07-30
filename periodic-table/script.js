@@ -207,6 +207,7 @@ function startGame() {
   textFont(bodyFont);
   textSize(30);
   gameInput.size(width * 0.15, height * 0.05);
+  gameInput.style('font-size', '20px');
   gameInput.position(width * 0.6, height * 0.45);
   gameInput.input(userGuess);
   inputButton.size(width * 0.03, gameInput.height);
