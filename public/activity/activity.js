@@ -6,8 +6,14 @@
  * @return {Array<string>} the resulting time labels as ISO date strings
  */
 function generateLabels(to, from=0) {
-    // Clone the date to not modify the original
+    // Create data and remove hours, minutes and seconds
     let date = new Date();
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+
+    // Subtract starting days from the current date
     date.setDate(date.getDate() + 1 - from);
 
     // Resulting labels
@@ -30,17 +36,17 @@ function generateLabels(to, from=0) {
  * @param from {number} the start day for the data, relative to the current date
  */
 function displayRange(to, from=0) {
+    // Generate the date labels
     let labels = generateLabels(to, from);
 
-    let numbersData = [];
-    for (let i = 0; i < to - from; i++) numbersData.push(Math.floor(Math.random() * 101));
-    let elementsData = [];
-    for (let i = 0; i < to - from; i++) elementsData.push(Math.floor(Math.random() * 101));
+    // Get the starting and ending indices
+    let startIdx = Numbers.accuracyPerDay.length - to + 1;
+    let endIdx = Numbers.accuracyPerDay.length - from;
 
     // Render graphs
-    renderGamesPerDayChart({ numbers: numbersData, elements: elementsData }, labels);
-    renderAverageScorePerGameChart({ numbers: numbersData, elements: elementsData }, labels);
-    renderAccuracyPerGameChart({ numbers: numbersData, elements: elementsData }, labels);
+    renderGamesPerDayChart({ numbers: Numbers.gamesPerDay.slice(startIdx, endIdx), elements: Elements.gamesPerDay.slice(startIdx, endIdx) }, labels);
+    renderAverageScorePerGameChart({ numbers: Numbers.scorePerDay.slice(startIdx, endIdx), elements: Elements.gamesPerDay.slice(startIdx, endIdx) }, labels);
+    renderAccuracyPerGameChart({ numbers: Numbers.accuracyPerDay.slice(startIdx, endIdx), elements: Elements.accuracyPerDay.slice(startIdx, endIdx) }, labels);
 
     // Render smaller charts
     renderGamesDistributionChart(50, 50);
@@ -64,6 +70,23 @@ function selectDateRangeCallback(to, from=0) {
     displayRange(to, from);
 }
 
+/**
+ * Display the current activity for a game
+ * @param game {{collection: string, lastPlayed: Date, gamesPerDay: Array<number>, scorePerDay: Array<number>}} the game data object
+ */
+function displayCurrentGameActivity(game) {
+    $(`#${game.collection}GamesPlayed`).text(
+        (game.lastPlayed.getDate() < (new Date()).getDate()) ?
+            0 :
+            game.gamesPerDay[game.gamesPerDay.length - 1]
+    );
+    $(`#${game.collection}AverageScore`).text(
+        (game.lastPlayed.getDate() < (new Date()).getDate()) ?
+            0 :
+            game.scorePerDay[game.scorePerDay.length - 1]
+    );
+}
+
 // Ensure users are logged in
 checkUserLoggedIn();
 
@@ -71,6 +94,12 @@ checkUserLoggedIn();
 $(document).ready(() => {
     'use strict'
 
-    // Create the graph
-    displayRange(7);
+    // Listen for new event data and re-render everything
+    document.addEventListener("analytics-data", () => {
+        // Display the big numbers
+        [Numbers, Elements].forEach(displayCurrentGameActivity);
+
+        // Re-draw graphs
+        displayRange(7);
+    })
 });

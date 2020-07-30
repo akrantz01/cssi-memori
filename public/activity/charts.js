@@ -181,11 +181,13 @@ function renderAverageScorePerGameChart({ numbers, elements }, labels) {
  * @param labels {Array<String>} the labels to give each dataset
  */
 function renderAccuracyPerGameChart({ numbers, elements }, labels) {
+    console.log(numbers);
+    console.log(elements);
     // Retrieve drawing context
     let ctx = replaceChart("accuracyPerGameChart");
 
     // Setup the chart options
-    let options = generateChartOptions("Average Score per Game per Day", "Average Score", labels);
+    let options = generateChartOptions("Accuracy per Game per Day", "Average Score", labels);
     options.scales.yAxes[0].ticks = {
         suggestedMax: 100,
         suggestedMin: 0
