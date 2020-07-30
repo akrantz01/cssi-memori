@@ -57,3 +57,12 @@ span.buttonText {
     font-weight: bold;
     font-family: 'Roboto', sans-serif;
 }
+
+/*
+ * Logo
+ */
+.logo {
+    border-radius: 5px;
+    background-color: #e6e6e6;
+    padding: 5px;
+}
