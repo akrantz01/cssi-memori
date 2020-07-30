@@ -40,7 +40,7 @@ function displayRange(to, from=0) {
     let labels = generateLabels(to, from);
 
     // Get the starting and ending indices
-    let startIdx = Numbers.accuracyPerDay.length - to + 1;
+    let startIdx = Numbers.accuracyPerDay.length - to;
     let endIdx = Numbers.accuracyPerDay.length - from;
 
     // Render graphs

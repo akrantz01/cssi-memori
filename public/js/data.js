@@ -61,7 +61,7 @@ class GameData {
         this.scorePerDay[this.scorePerDay.length - 1] = addToAverage(this.scorePerDay[this.scorePerDay.length - 1], score, this.gamesPerDay[this.gamesPerDay.length - 1]);
 
         // Update the database
-        firebase.firestore().collection(this.collection).doc(this.uid).update({
+        await firebase.firestore().collection(this.collection).doc(this.uid).update({
             "total-games": firebase.firestore.FieldValue.increment(1),
             "last-played": firebase.firestore.FieldValue.serverTimestamp(),
             "accuracy-per-day": this.accuracyPerDay,
