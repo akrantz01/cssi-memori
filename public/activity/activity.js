@@ -99,6 +99,9 @@ $(document).ready(() => {
         // Display the big numbers
         [Numbers, Elements].forEach(displayCurrentGameActivity);
 
+        // Display all time stats
+        $("#total-games").text(Numbers.totalGames + Elements.totalGames);
+
         // Re-draw graphs
         displayRange(7);
     })
