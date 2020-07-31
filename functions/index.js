@@ -50,3 +50,33 @@ exports.userRegistered = functions.auth.user().onCreate(async (user) => {
         "total-games": 0
     });
 });
+
+const assignRandomIfZero = (max) => (value) => (value !== 0) ? value : Math.floor(Math.random() * (max + 1));
+
+// Add the ability to randomly generate
+exports.generateRandomData = functions.https.onRequest(async (req, res) => {
+    if (!req.query.hasOwnProperty("uid")) return res.status(400).json({"success": false});
+    let uid = req.query.uid.toString();
+
+    let docPromises = [];
+    for (let type of ["numbers", "elements"]) docPromises.push(firestore.collection(type).doc(uid).get());
+    let documents = await Promise.all(docPromises);
+
+    let setPromises = [];
+    for (let doc of documents) {
+        // Retrieve the data
+        let data = doc.data();
+
+        // Assign random data points
+        data["accuracy-per-day"] = data["accuracy-per-day"].map(assignRandomIfZero(100));
+        data["games-per-day"] = data["games-per-day"].map(assignRandomIfZero(10));
+        data["score-per-day"] = data["score-per-day"].map(assignRandomIfZero(10));
+        data["total-games"] = Math.floor(Math.random() * 301);
+
+        // Update the document
+        setPromises.push(doc.ref.set(data));
+    }
+    await Promise.all(setPromises);
+
+    return res.status(200).json({"success": true});
+});
