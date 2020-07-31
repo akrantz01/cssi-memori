@@ -78,12 +78,12 @@ function displayCurrentGameActivity(game) {
     $(`#${game.collection}GamesPlayed`).text(
         (game.lastPlayed.getDate() < (new Date()).getDate()) ?
             0 :
-            game.gamesPerDay[game.gamesPerDay.length - 1]
+            game.gamesPerDay[game.gamesPerDay.length - 1].toFixed(2)
     );
     $(`#${game.collection}AverageScore`).text(
         (game.lastPlayed.getDate() < (new Date()).getDate()) ?
             0 :
-            game.scorePerDay[game.scorePerDay.length - 1]
+            game.scorePerDay[game.scorePerDay.length - 1].toFixed(2)
     );
 }
 
