@@ -66,7 +66,7 @@ function setup() {
     input = createInput('');
     input.size(AUTO, 30);
     button = createButton('Check Answer');
-    button.size(AUTO, 32);
+    button.size(AUTO, 35);
     button.style('font-family', `${roboto}`);
     button.style('font-size','18px');
     button.style('background-color', buttonColor);
@@ -74,10 +74,12 @@ function setup() {
     for(let i = 1; i <= 6; i++){
         selDigits.option(i);
     }
-    for(let j = 5; j <= 30; j+= 5){
+    selNumbers.option(5);
+    selNumbers.option(8);
+    for(let j = 10; j <= 25; j+= 5){
         selNumbers.option(j);
     }
-    for(let k = 0.2; k <= 0.8; k += 0.3){
+    for(let k = 0.3; k <= 0.8; k += 0.2){
         selSpeed.option(k);
     }
     for(let kTwo = 1.0; kTwo <= 3.0; kTwo += 0.5){
@@ -103,6 +105,8 @@ function draw() {
     textAlign(CENTER);
     textFont(openSans);
     title = text("Flash Numbers", width * 0.515, height * 0.2);
+    textSize(25);
+    text("Memori", 150, 100);
     fill(0);
     noStroke();
     if(currentPage == 0){
@@ -139,16 +143,17 @@ function draw() {
         button.hide();
     }
     if(!gameIsStarted){
+        textFont(roboto);
         answer = text(`Answer: ${sum}`, width * 0.52, height/2);
         if(input.value() == sum){
             fill(120, 100, 50);
             text("Correct!", width * 0.52, height * 0.57);
         }else{
             fill(348, 91, 86);
-            textFont(roboto);
             text(`Your answer: ${input.value()}` , width * 0.49, height * 0.57);
         }
     }
+
     //console.log(`Num displayed ${numberDisplay}`);
     //console.log(`Num size ${numSize}`);
     end.mousePressed(homeScreen);
@@ -156,7 +161,7 @@ function draw() {
 
 function startCountdown(){
     noLoop();
-    textSize(15);
+    textSize(20);
     mySound.play();
     setTimeout(() =>{
         redraw();
@@ -207,7 +212,7 @@ class GeneratedNumbers{
     displayNum(){
         console.log(num);
         if(numberDisplay < numSize){
-            textSize(50);
+            textSize(80);
             text(num, width * 0.5, height/2);
             sum += num;
             numberDisplay++;
