@@ -59,6 +59,7 @@ function setup() {
   homeButton.position(-width, -height);
 
   correctList = [];
+  pastQuestions = [];
   currentPage = 0;
   randIndex = 0;
   correctAns = false;
@@ -183,9 +184,22 @@ function startGame() {
   }
 
   // element
-  randIndex = floor(random(elementList.length));
+  // check for repeated questions
+  let newIndex = false;  
+  while (!newIndex) {
+    randIndex = floor(random(elementList.length));
+    for (let i = 0; i < pastQuestions.length; i++) {
+      if (pastQuestions[i] == randIndex) {
+        newIndex = false;
+      }
+    }
+    newIndex = true;
+  }
+
+  pastQuestions.push(randIndex);
+    
   fill("white");
-  rect(width * 0.2, height * 0.1, width * 0.25, height * 0.8);
+  let elementRect = rect(width * 0.2, height * 0.1, width * 0.25, height * 0.8);
 
   fill("black");
   textSize(35);
@@ -226,6 +240,19 @@ function userGuess() {
 
 function checkAnswer() {
   // console.log('check ans');
+ 
+  // account for case sensitivity
+  userAns = userAns.toLowerCase();
+  
+  // check for extra spaces
+  let tempUserAns = '';
+  for (let i = 0; i < userAns.length; i++) {
+    if (userAns[i] != ' ') {
+      tempUserAns += userAns[i];
+    }
+  }
+  userAns = tempUserAns;
+  
   if (userAns.toLowerCase() == elementList[randIndex].name.toLowerCase()) {
     // console.log("TRUE");
     image(
