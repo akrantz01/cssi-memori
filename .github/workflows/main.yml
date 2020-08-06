@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: w9jds/firebase-action@v1.5
+      - uses: w9jds/firebase-action@v1.5.0
         with:
           args: deploy --only hosting
         env:
