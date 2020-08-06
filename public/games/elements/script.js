@@ -2,13 +2,13 @@
 // Icons made by Freepik, Pixel perfect, and Vitaly Gorbachev from www.flaticon.com
 
 /* global createCanvas, colorMode, HSB, width, height, random, background, fill, noFill, color, random,
-          rect, ellipse, stroke, image, loadImage, frameRate, collideCircleCircle, collideRectCircle, text,
-          mouseX, mouseY, strokeWeight, line, mouseIsPressed, windowWidth, windowHeight, noStroke,
+          rect, ellipse, stroke, image, loadImage, frameRate, collideCircleCircle, collideRectCircle, text, 
+          mouseX, mouseY, strokeWeight, line, mouseIsPressed, windowWidth, windowHeight, noStroke, 
           keyCode, UP_ARROW, LEFT_ARROW, RIGHT_ARROW, DOWN_ARROW, textSize, noLoop, loop, textFont,
           collideRectRect, round, createButton, createInput, floor, createSelect, loadFont, textAlign,
           CENTER, LEFT, tint, RGB, AUTO, PI, rotate, translate, textStyle, BOLD */
 
-let elementList, score, tries, currentPage;
+let elementList, score, tries, currentPage, pastQuestions;
 let correctImg, incorrectImg, periodicTableImg, elementGroupImg;
 let startButton, nextButton, homeButton, toStartButton, inputButton, gameInput, correctList;
 let randIndex, correctAns, userAns;
@@ -37,15 +37,15 @@ function setup() {
   colorMode(HSB, 360, 100, 100);
 
   // json setup
-  fetch("periodic-table.json")
+  fetch("PeriodicTableJSON.json")
     .then(response => response.text())
     .then(text => parseJSON(text));
 
   // draw setup
   startButton = createButton("Start");
   nextButton = createButton("Next");
-  toStartButton = createButton("Back to Start");
   homeButton = createButton("Home");
+  toStartButton = createButton("Back to Start");
 
   elementList = [];
   gameInput = createInput("");
@@ -53,12 +53,13 @@ function setup() {
 
   startButton.position(-width, -height);
   nextButton.position(-width, -height);
-  toStartButton.position(-width, -height);
-  gameInput.position(-width, -height);
-  inputButton.position(-width, -height);
   homeButton.position(-width, -height);
+  gameInput.position(-width, -height);
+  toStartButton.position(-width, -height);
+  inputButton.position(-width, -height);
 
   correctList = [];
+  pastQuestions = [];
   currentPage = 0;
   randIndex = 0;
   correctAns = false;
@@ -86,8 +87,8 @@ function draw() {
     inputButton.position(-width, -height);
   } else if (currentPage == 1) {
     startButton.position(-width, -height);
-    toStartButton.position(-width, -height);
     homeButton.position(-width, -height);
+    toStartButton.position(-width, -height);
   } else if (currentPage == 2) {
     startButton.position(-width, -height);
     nextButton.position(-width, -height);
@@ -183,9 +184,23 @@ function startGame() {
   }
 
   // element
-  randIndex = floor(random(elementList.length));
+  
+  // check for repeated questions
+  let newIndex = false;  
+  while (!newIndex) {
+    randIndex = floor(random(elementList.length));
+    for (let i = 0; i < pastQuestions.length; i++) {
+      if (pastQuestions[i] == randIndex) {
+        newIndex = false;
+      }
+    }
+    newIndex = true;
+  }
+
+  pastQuestions.push(randIndex);
+    
   fill("white");
-  rect(width * 0.2, height * 0.1, width * 0.25, height * 0.8);
+  let elementRect = rect(width * 0.2, height * 0.1, width * 0.25, height * 0.8);
 
   fill("black");
   textSize(35);
@@ -198,12 +213,13 @@ function startGame() {
     height * 0.25,
     width * 0.25
   );
-  textSize(70);
+  textSize(60);
+  textAlign(CENTER);
   text(
     `${elementList[randIndex].symbol}`,
-    width * 0.2,
+    width * .2,
     height * 0.5,
-    width * 0.25
+    width * .25
   );
 
   tries--;
@@ -226,6 +242,19 @@ function userGuess() {
 
 function checkAnswer() {
   // console.log('check ans');
+  
+  // account for case sensitivity
+  userAns = userAns.toLowerCase();
+  
+  // check for extra spaces
+  let tempUserAns = '';
+  for (let i = 0; i < userAns.length; i++) {
+    if (userAns[i] != ' ') {
+      tempUserAns += userAns[i];
+    }
+  }
+  userAns = tempUserAns;
+  
   if (userAns.toLowerCase() == elementList[randIndex].name.toLowerCase()) {
     // console.log("TRUE");
     image(
