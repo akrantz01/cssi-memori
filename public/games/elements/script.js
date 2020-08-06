@@ -180,7 +180,9 @@ function startGame() {
     } else {
       fill("#dcdedc");
     }
-    ellipse(width * 0.1, height * 0.1 + i * 50, 40, 40);
+    let ellipse_rad = (height * .7) / 23.5;
+    ellipse(width * 0.1, height * 0.1 + ellipse_rad + (i * 2.75 * ellipse_rad), 2 * ellipse_rad, 2 * ellipse_rad);
+    // rect(width * 0.2, height * 0.1, width * 0.25, height * 0.8);
   }
 
   // element
@@ -303,6 +305,7 @@ function checkAnswer() {
   } else {
     nextButton.mousePressed(() => Elements.playedGame((score / 10) * 100, score).then(endScreen));
   }
+
   // console.log(tries);
 }
 
